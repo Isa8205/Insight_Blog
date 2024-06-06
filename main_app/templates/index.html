@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" id="theme">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InSight-home</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/grid.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+
+    <style>
+        .back-to-top {
+            position: fixed;
+            bottom: 10vh;
+        }
+
+        .upload {
+            position: fixed;
+            bottom: 10vh;
+            right: 10vh;
+            background: rgb(43,45,66);
+            border-radius: 50%;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+        
+    <!-- Start of the navbar -->
+    <div class="topnav" id="myTopnav" role="navigation">
+        
+        <div class="logo"><a href="/">In<b>Sight</b></a></div>
+        <a href="/technology">Technology</a>
+        <a href="/fashion">Fashion</a>
+        <a href="/sports">Sports</a>
+        <a href="/business">Business</a>
+        <a href="/other">Other</a>
+        <!-- <button class="btn btn-purple a" onclick="modalfunction(true)">Modal</button>
+        <button class="btn btn-red" onclick="themeFunction()">Theme</button> -->
+
+        <a href="javascript:void(0)" class="icon" onclick="navfunction()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </a>
+        
+    </div>
+    <!-- End of the navbar -->
+
+    <div class="modal" id="modal">
+        <div class="modal-box">            
+        <div class="modal-header">
+            <div class="title"><h3>Example</h3></div>
+            <div class="close"><button class="btn btn-red" onclick="modalfunction(false)">close</button></div>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to log out</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-red">Yes</button>
+        </div>
+        </div>
+    </div>
+
+    <div class="carousel">
+        <div class="slide">
+            <img src="{% static 'images/Tech.jpg' %}" alt="" width="100%">
+            <div class="text">Caption Text1</div>
+        </div>
+        <div class="slide">
+            <img src="{% static 'images/other.jpg' %}" alt="" width="100%">
+            <div class="text">Caption Text2</div>
+        </div>
+        <div class="slide">
+            <img src="{% static 'images/fashion.jpg' %}" alt="" width="100%">
+            <div class="text">Caption Text3</div>
+        </div>
+        <a href="javascript:void(0)" class="prev" onclick="plusSlides(-1)">&#10094</a>
+        <a href="javascript:void(0)" class="next" onclick="plusSlides(1)">&#10095</a>
+        <div class="dot-box">
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
+    </div>
+
+    <!-- The grid that holds the elements of the body -->
+    <div class="row">
+
+        <!-- The div to hold the first column -->
+        <div class="col-3">
+
+            <div class="container">
+                {% if request.user.is_authenticated %}
+                    <h4>My Profile</h4>
+                    <div class="profile">
+                        <a href="/account"><img src="{% static 'profiles/' %}{{ user.profile_image }}" alt="Profile picture" height="150"></a>
+                    </div>
+                    <hr>
+                    <div class="details">
+                        <p>{{ user.username }}</p>
+                        <p>Member</p>
+                        <a href="/logout"><button class="btn btn-red" style="background-color: rgb(231, 12, 12);">Log Out</button></a>
+                    </div>
+                
+                {% else %}
+                    <h4>My Profile</h4>
+                    <div class="profile">
+                    <img src="{% static 'images/avatar3.png' %}" alt="" height="150">
+                    </div>
+                    <hr>
+                    <div class="details">
+                        <p>Guest</p>
+                        <p>Please log in to view your profile</p>
+                        <a href="/login"><button class="btn btn-blue">Login</button></a>
+                        <a href="/signup"><button class="btn btn-blue">Sign up</button></a>
+                    </div>
+                {% endif %}
+            </div>                
+
+        </div>
+        <!-- End of the first column(col-3) -->
+
+        <!-- Start of the second column -->
+        <div class="col-7">
+
+            {% for item in page_data %}
+            <div class="container-mid">
+                <div class="top">
+                    <img src="{% static 'profiles/' %}{{ item.author.profile_image }}" alt="Author profile" height="50">
+                    <div class="info">
+                        <b style="display: block;">{{ item.author.username }}</b>
+                        <i style="display: block;" class="date">{{ item.created_at }}</i>
+                    </div>
+                    
+                </div>
+                <div class="middle">
+                    <article>
+                        <header>
+                            <h3 style="font-family: ChakraPetch; font-weight: bold;">{{ item.title }}</h3>
+                        </header>
+                        {% if item.content|length > 2000 %}
+                        <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{{ item.content|slice:":2000" }}...</p>
+                        {% else %}
+                        <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">{{ item.content }}</p>
+                        {% endif %}                    
+                    </article>
+                </div>
+                
+            </div>
+            {% endfor %}
+
+        </div>
+        <!-- End of the second column(col-7) -->
+
+        <!-- Start of the third column -->
+        <div class="col-2">
+
+            <div class="container">
+                
+                <h4>Coming <em>soon</em></h4>
+
+                <p style="font-family: ChakraPetch; font-weight: bold;">A new version of this website will soon be out. This version is just but the first prototype and I am proud to say that it has been a success.</p>
+                <p><i><b>Life is just like a bicycle, in order to maintain balance, you have to keep moving.</b></i></p>
+                <p>&hyphen; Albert Einstein</p>
+
+                <img style="border-radius: 10px; margin-bottom:10px;" src="{% static 'images/sports2 (2).jpg' %}" alt="" width="100%">
+            </div> 
+
+        </div>
+        <!-- End of the third column --> 
+        
+
+    </div>
+    <a href="#" class="back-to-top" onclick="scrollToTop()"><img src="{% static 'images/icons/arrow-up.png' %}" alt="" height="30px"></a>
+    {% if request.user.is_authenticated %}
+    <a href="/upload"><span class="upload"><img src="{% static 'images/icons/add.png' %}" alt="upload" height="40"></span></a>
+    {% endif %}
+    <!-- End of the grid -->
+
+    <!-- Start of the footer -->
+    <footer>
+        <div class="col-3 contacts">
+            <h4>Contact Us</h4>
+            <img src="{% static 'images/icons/whatsapp.png' %}" alt="" height="30">
+            <b>: +254768304385</b><br>
+            <img src="{% static 'images/icons/instagram.png' %}" alt="" height="30">
+            <b>: _bravoHub</b>
+
+        </div>
+        <div class="col-4 comments">
+            <h4>Comments</h4>
+            <p>We do value your feedback as it allows us to make this platform better for everyone</p>
+            <form action="/review" method="post" target="_self">
+                {% csrf_token %}
+                <label for="subject">Subject</label>
+                <input type="text" name="subject" id="subject" class="form-input" placeholder="Example: User interface">
+                <label for="description">Description</label>
+                <textarea name="description" id="description" placeholder="Write here"></textarea>
+                <input type="submit" value="Send" class="btn btn-blue">
+            </form>
+        </div>
+        <div class="col-5">
+            <h4>FAQs</h4>
+            <p>This is the first version of the website and it is still under development.</p>
+            <p>In the event you come across a design flaw or a bug please feel free to contact us through the communication channels provided. We do hope that you fully enjoy our services</p>
+        </div>
+
+    </footer>
+
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
+</body>
+</html>
